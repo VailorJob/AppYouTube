@@ -1,0 +1,27 @@
+{
+    "NOYOUTUBE": [
+        "https://yewtu.be",
+        "https://invidious.snopyta.org",
+        "https://invidious.kavin.rocks",
+        "https://invidious-us.kavin.rocks",
+        "https://vid.puffyan.us",
+        "https://ytprivate.com",
+        "https://invidious.exonip.de",
+        "https://ytb.trom.tf",
+        "https://ytprivate.com"
+    ],
+    "YOUTUBE": "https://www.youtube.com",
+    "NOYOUTUBE_CHANNEL_LOGO": "/ggpht",
+    "YOUTUBE_CHANNEL_LOGO": "https://yt3.ggpht.com",
+    "YOUTUBE_VIDEO_THUMBNAIL": "https://i.ytimg.com",
+    "SEARCH_QUERY": "/search?q=",
+    "CHANNEL_NEXT_PAGE": "#contents > div:nth-child(10) > div:nth-child(3) > a",
+    "CHANNEL_NAME_SELECT": ".channel-profile > span",
+    "CHANNEL_DESCRIPTION": ".descriptionWrapper",
+    "VIDEOS": ".pure-u-1.pure-u-md-1-4 > .h-box",
+    "VIDEOS_URL_SELECT": "a",
+    "VIDEOS_THUMBNAIL": "img.thumbnail",
+    "VIDEOS_LENGTH": "p.length",
+    "VIDEOS_TEXT_SELECT": "p[dir='auto']",
+    "VIDEOS_DATE_UPLOAD": ".flex-left > p"
+}
