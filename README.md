@@ -5,4 +5,4 @@ The subscribe.txt file is needed for the YouTube channels you want to subscribe 
 youtube.bat launches the application. 
 After launch, channels are added to the library, which are located in the subscribe.txt file.
 
-In the application, you can add new channels in the *Channels* tab, in the *My videos* tab, you can search for videos from added channels by video name and in the *Search* tab, search for videos on youtube.
+In the application, you can add new channels in the ***Channels*** tab, in the ***My videos*** tab, you can search for videos from added channels by video name and in the ***Search*** tab, search for videos on youtube.
