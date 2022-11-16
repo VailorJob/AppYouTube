@@ -9,7 +9,7 @@ import database
 from os.path import exists
 
 def convert_to_binary_data(filename):
-    # Преобразование данных в двоичный формат
+    # Converting data to binary format
     file = driver.get(filename)
     if file.status_code == 200:
         return file.content
@@ -23,15 +23,15 @@ def search(_sear=False, _filter=False):
     if _sear or _sear == "":
         sear = _sear
     elif _sear != "":
-        sear = input("Введите то что вы хотите найти: ")
+        sear = input("Enter what you want to find: ")
     
-    print("Начинаю поиск " + sear)
+    print("I start searching " + sear)
 
     r = driver.get(f"{ALL_VAR['SEARCH_QUERY']}{sear}")
 
     soup = BS4(r.content, "lxml")
 
-    sear_list = ["<-- Назад"]
+    sear_list = ["<-- Back"]
     videos =  soup.select(ALL_VAR["VIDEOS"])
 
     dict_sear = {}
@@ -43,9 +43,9 @@ def search(_sear=False, _filter=False):
         if not "channel" in video_url and _sear and _filter == "channel" or video_text in dict_sear and _filter == "channel":
             continue
         elif "channel" in video_url and _filter != "channel":
-            video_text = "[Канал] " + video_text
+            video_text = "[Channel] " + video_text
         elif "playlist" in video_url:
-            video_text = "[Плейлист] " + video_text
+            video_text = "[Playlist] " + video_text
 
         print(video_text)
 
@@ -58,7 +58,7 @@ def search(_sear=False, _filter=False):
         print(target_half[0])
         vibor2 = target_half[0]
 
-        if vibor2 == "<-- Назад":
+        if vibor2 == "<-- Back":
             return
         else:
             name = vibor2
@@ -104,28 +104,28 @@ def update_video(_dict_video, _active_channel, _soup=False, _update=True):
 
             if not _soup:
                 print(f'\n{video_name}')
-                print("++ Добавленно ++")
+                print("++ Added ++")
             else:
-                status_vid = "++ Добавленны новые видео ++"
+                status_vid = "++ New videos added ++"
 
             values.append((_active_channel[0], video_name, video_link))
 
         if len(values) == 1:
-            status_vid = "++ Добавленны новые видео ++"
+            status_vid = "++ New videos added ++"
             db.insert(
                 table="Videos", 
                 column="(id_channel, name, url)", 
                 values=values[0]
             )
         elif len(values) > 1:
-            status_vid = "++ Добавленны новые видео ++"
+            status_vid = "++ New videos added ++"
             db.insertmany(
                 table="Videos", 
                 column="(id_channel, name, url)", 
                 values=values
             )
         else:
-            print("-- Новых видео нет! --")
+            print("-- No new videos! --")
             
 
     if _soup:
@@ -138,12 +138,12 @@ def add_channel(_dict_channel=False, _h=False):
     if _h:
         org_link = _h
     else:
-        org_link = input("Введите название или адресс канала:\n")
+        org_link = input("Enter channel name or address:\n")
 
         if not "https://www.youtube.com" in org_link:
             org_link = search(org_link, "channel")
             if not org_link:
-                return "Отмена"
+                return "Cancel"
 
     h = org_link.replace(ALL_VAR["YOUTUBE"], ALL_VAR["NOYOUTUBE"])
 
@@ -163,9 +163,9 @@ def add_channel(_dict_channel=False, _h=False):
             column="(name, url)", 
             values=[pre_canell, org_link]
         )
-        status_up = "Добавление завершено!"
+        status_up = "Addition completed!"
         print(pre_canell)
-        print("++ Добавляется в базу! ++")
+        print("++ Added to database! ++")
 
     dict_video_channel = db.get_dict("id, name, url", "Videos", f"id_channel = {last_id}")
     identic, status_vid = update_video(dict_video_channel, [last_id, h], soup, False)
@@ -177,7 +177,7 @@ def add_channel(_dict_channel=False, _h=False):
         status_up = ""
 
     while(not identic):
-        print(f"Добавления страницы: {len(soup_list)}")
+        print(f"Page additions: {len(soup_list)}")
 
         h = soup.select(ALL_VAR["CHANNEL_NEXT_PAGE"])
         if h:
@@ -204,7 +204,7 @@ def add_channel(_dict_channel=False, _h=False):
     print(status_up)
 
 def del_channel():
-    list_channel = start_list = ["<-- Назад"]
+    list_channel = start_list = ["<-- Back"]
     _dict_channel = db.get_dict('id, name, url', 'Channel')
     list_channel.extend(_dict_channel)
 
@@ -213,7 +213,7 @@ def del_channel():
         print(target_chanel[0])
         vibor = target_chanel[0]
 
-        if vibor == "<-- Назад":
+        if vibor == "<-- Back":
             break
         else:
             delete_id = _dict_channel[target_chanel[0]][0]
@@ -224,14 +224,14 @@ def del_channel():
 
 def my_video(where=1):
     my_dict_video = db.get_dict("id, name, url", "Videos", where)
-    my_video = ["<-- Назад"]
+    my_video = ["<-- Back"]
     my_video.extend(my_dict_video)
 
     while(True):
         target_video = fzf.prompt(my_video)[0]
         print(target_video)
 
-        if target_video == "<-- Назад":
+        if target_video == "<-- Back":
             break
 
         link = my_dict_video[target_video][1]
@@ -242,7 +242,7 @@ def my_video(where=1):
         os.system(comand)
 
 def channel():
-    start_ids = ["<-- Назад", "++ Добавить канал ++", "-- Удалить канал --"]
+    start_ids = ["<-- Back", "++ Add channel ++", "-- Delete channel --"]
 
     while(True):
         dict_channel = db.get_dict('id, name, url', 'Channel')
@@ -252,10 +252,10 @@ def channel():
         print(target_chanel[0])
         vibor = target_chanel[0]
 
-        if vibor == "<-- Назад":
+        if vibor == "<-- Back":
             break
         elif vibor == ids[1]:
-            if add_channel() != "Отмена":
+            if add_channel() != "Cancel":
                 input(pause_text)
         elif vibor == ids[2]:
             del_channel()
@@ -269,7 +269,7 @@ def channel():
                 dict_video = db.get_dict("id, name, url", "Videos", f"id_channel = {active_channel[0]}")
             
             while(True):
-                spisokNAME = ["<-- Назад", "++ Обновить видео ++"]
+                spisokNAME = ["<-- Back", "++ Update video ++"]
                 spisokNAME.extend(dict_video)
 
                 target1=fzf.prompt(spisokNAME)
@@ -278,10 +278,10 @@ def channel():
 
                 you_vibor = target1[0]
 
-                if you_vibor == "<-- Назад":
+                if you_vibor == "<-- Back":
                     break
                 
-                if you_vibor == "++ Обновить видео ++":
+                if you_vibor == "++ Update video ++":
                     update_video(dict_video, active_channel)
                     input(pause_text)
                     dict_video = db.get_dict("id, name, url", "Videos", f"id_channel = {active_channel[0]}")
@@ -295,7 +295,7 @@ def channel():
                     status_code = os.system(comand2)
 
                     if status_code == 2:
-                        print("Видео не доступно на ютубе поэтому будет удалено с базы данных")
+                        print("The video is not available on YouTube so it will be removed from the database")
                         input(pause_text)
 
                         delete_video = db.delete("Videos", f"id = {active_video[0]}")
@@ -341,11 +341,11 @@ def update_channel():
 
 def func():
     first_menu = {
-        "ПОИСК+++": search,
-        "Каналы": channel,
-        "Мои видео": my_video,
-        "Обновить список Каналов": update_channel,
-        "Выход": ""
+        "SEARCH+++": search,
+        "Channels": channel,
+        "My videos": my_video,
+        "Update channel list": update_channel,
+        "Exit": ""
     }
 
     ids = [i for i in first_menu.keys()]
@@ -355,7 +355,7 @@ def func():
         vibor = target_chanel[0]
         print(vibor)
 
-        if vibor == "Выход":
+        if vibor == "Exit":
             break
         
         first_menu[vibor]()
@@ -401,7 +401,7 @@ def main():
         with open(JSON_CONF, "w", encoding="utf-8") as file:
             json.dump(ALL_VAR, file, indent=4, ensure_ascii=False)
 
-    # Нужно для того чтобы нас не воспринимали как бота
+    # It is necessary so that we are not perceived as a bot
     HEADERS = {
         "user-agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                       "Chrome/78.0.3904.99 Safari/537.36 Vivaldi/2.9.1705.41",
@@ -419,28 +419,28 @@ def main():
 
     fzf = FzfPrompt()
 
-    pause_text = "\nДля продолжения нажмите любую клавишу . . . "
+    pause_text = "\nPress any key to continue . . . "
     kom = exists("Channel.db")
 
     db = database.DB('Channel.db')
 
     if kom == True:
-        print("База каналов найдена!")
+        print("Channel database found!")
         func()
 
     else:
-        print("Генерируем базу каналов, это может занять некоторое время...")
+        print("We generate the channel database, this may take some time...")
         update_channel()
         func()
 
 if __name__ == "__main__":
     try:
         main()
-        print("Завершение работы")
+        print("Shutdown")
     finally:
         if db.db:
             db.db.close()
-            print("Соединение с SQLite закрыто")
+            print("SQLite connection closed")
 
     # text = driver.get("https://dush.com.ua/image/catalog/easyphoto/36000_37000/36466/2505202102_7667.jpg")
     # with open("bn-1-90.jpg", "wb") as f:
